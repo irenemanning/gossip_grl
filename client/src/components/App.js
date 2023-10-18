@@ -1,9 +1,9 @@
 
-import './App.css';
+import '../App.css';
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import NavBar from './components/NavBar';
+import NavBar from './NavBar';
 function App() {
   const [user, setUser] = useState(null);
   // const [posts, setPosts] = useState([])
