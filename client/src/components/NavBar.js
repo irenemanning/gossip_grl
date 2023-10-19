@@ -1,6 +1,6 @@
-import React from "react";
-// import { Link } from "react-router-dom";
-import { Nav, Navbar, Container, Offcanvas } from "react-bootstrap";
+import React from "react"
+// import { Link } from "react-router-dom"
+import { Nav, Navbar, Container, Offcanvas } from "react-bootstrap"
 
 function NavBar({setUser, user, setShowSignin}){
 
@@ -43,7 +43,9 @@ function NavBar({setUser, user, setShowSignin}){
                     <Offcanvas.Body>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
                         <Nav.Link href="#action2">Hello, username{}</Nav.Link>
-                        <Nav.Link href="#action1">GOSSIP</Nav.Link>
+                        <Nav.Link href="/gossip">+ GOSSIP</Nav.Link>
+                        <Nav.Link href="/login">Login</Nav.Link>
+                        <Nav.Link href="/signup">Sign Up</Nav.Link>
                         </Nav>
                     </Offcanvas.Body>
                     </Navbar.Offcanvas>
@@ -55,4 +57,4 @@ function NavBar({setUser, user, setShowSignin}){
       )
   }
   
-  export default NavBar;
+  export default NavBar
