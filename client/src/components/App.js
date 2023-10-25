@@ -7,11 +7,13 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import NavBar from './NavBar'
 import Login from './Pages/Login'
 import Signup from './Pages/Signup'
+import Profile from './Pages/Profile'
+import Posts from './Pages/Posts'
 import CreatePost from './Pages/CreatePost'
 
 function App() {
   const user = useSelector((state) => state.user.user)
-  const isLoading = useSelector((state) => state.user.isLoading);
+  const isLoading = useSelector((state) => state.user.isLoading)
   const dispatch = useDispatch()
   console.log(user)
 
@@ -31,8 +33,8 @@ function App() {
           
           {user? (
             <>
-            <Route path="/" />
-            <Route path="/profile" />
+            <Route path="/" element={<Posts />} />
+            <Route path="/profile" element={<Profile user={user} />} />
             <Route path='/gossips/:id' />
             <Route path='/gossip' element={<CreatePost/>} />
             </>
