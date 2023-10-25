@@ -12,6 +12,7 @@ function ReusableForm({ fields, initialValues, onSubmit }) {
     const handleSubmit = (e) => {
       e.preventDefault()
       onSubmit(formValues)
+      setFormValues(initialValues)
     }
   
     return (
@@ -24,6 +25,7 @@ function ReusableForm({ fields, initialValues, onSubmit }) {
                 as="textarea"
                 rows="4" // You can adjust the number of rows
                 placeholder={field.placeholder}
+                name={field.name}
                 value={formValues[field.name]}
                 onChange={handleChange}
               />
@@ -31,6 +33,7 @@ function ReusableForm({ fields, initialValues, onSubmit }) {
               <Form.Control
                 type={field.type}
                 placeholder={field.placeholder}
+                name={field.name}
                 value={formValues[field.name]}
                 onChange={handleChange}
               />

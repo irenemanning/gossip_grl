@@ -9,7 +9,9 @@ class PostsController < ApplicationController
         render json: wine
     end
     def create
-        post = Post.create!(post_params)
+        post = @current_user.posts.create!(post_params)
+        hashtags = extract_hashtags_from_post_body(post.body)
+        post.hashtags << hashtags.map { |tag| Hashtag.find_or_create_by(tag: tag) }
         render json: post, status: :created
     end
     def update
@@ -31,4 +33,8 @@ class PostsController < ApplicationController
     def find_post
         Post.find_by(id: params[:id])
     end
+    def extract_hashtags_from_post_body(body)
+        body.scan(/#\w+/).map { |tag| tag.gsub('#', '') }
+    end
+
 end

@@ -1,29 +1,22 @@
 import React from "react"
-// import { Link } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { logoutUser } from "../Redux/authSlice"
 import { Nav, Navbar, Container, Offcanvas } from "react-bootstrap"
 
-function NavBar({setUser, user, setShowSignin}){
+function NavBar({user}){
+    const dispatch = useDispatch()
 
-    // async function handleLogout() {
-    //   try {
-    //     const response = await fetch('/logout', { method: "DELETE" });
-    //     if (response.ok) {
-    //       setUser(null)
-    //     } else {
-    //       console.error("Logout failed:", response.status, response.statusText);
-    //     }
-    //   } catch (error) {
-    //     console.error("Logout error:", error);
-    //   }
-    // }
-  
+    function handleLogout(user) {
+        dispatch(logoutUser(user))
+    }
+
       return (
         <div> 
             <>
             {[false].map((expand) => (
                 <Navbar fixed="top"  key={expand} expand={expand} className="bg-body-tertiary mb-3">
                 <Container fluid style={{marginLeft: "5px", marginRight: "5px"}}>
-                    <Navbar.Brand href="#home">
+                    <Navbar.Brand href="/">
                         <img src="ggicon.png" alt="Logo"
                         style={{height: "80px", width: "80px", marginRight: "20px"}}
                         />
@@ -42,10 +35,18 @@ function NavBar({setUser, user, setShowSignin}){
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
-                        <Nav.Link href="#action2">Hello, username{}</Nav.Link>
-                        <Nav.Link href="/gossip">+ GOSSIP</Nav.Link>
-                        <Nav.Link href="/login">Login</Nav.Link>
-                        <Nav.Link href="/signup">Sign Up</Nav.Link>
+                        {user ? (
+                        <>
+                            <Nav.Link href="/profile">Hello, {user.username}</Nav.Link>
+                            <Nav.Link href="/gossip">+ GOSSIP</Nav.Link>
+                            <Nav.Link onClick={() => handleLogout(user)} >Logout</Nav.Link>
+                        </>
+                        ) : (
+                        <>
+                            <Nav.Link href="/login">Login</Nav.Link>
+                            <Nav.Link href="/signup">Sign Up</Nav.Link>
+                        </>
+                        )}
                         </Nav>
                     </Offcanvas.Body>
                     </Navbar.Offcanvas>

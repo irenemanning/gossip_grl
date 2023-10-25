@@ -1,6 +1,7 @@
-
 import '../App.css'
-import React, { useState } from "react"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUser } from '../Redux/authSlice'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import NavBar from './NavBar'
@@ -9,29 +10,36 @@ import Signup from './Pages/Signup'
 import CreatePost from './Pages/CreatePost'
 
 function App() {
-  // const [user, setUser] = useState(null)
-  const [user, setUser] = useState(true)
-  // const [posts, setPosts] = useState([])
-  const [showSignin, setShowSignin] = useState(true)
+  const user = useSelector((state) => state.user.user)
+  const isLoading = useSelector((state) => state.user.isLoading);
+  const dispatch = useDispatch()
+  console.log(user)
 
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="App">
       <Router>
-        <NavBar user={user} setUser={setUser} setShowSignin={setShowSignin} />
+        <NavBar user={user} />
         <Routes> 
-          <Route path="/" />
+          
           {user? (
             <>
+            <Route path="/" />
             <Route path="/profile" />
-            <Route path='/gossips' />
             <Route path='/gossips/:id' />
             <Route path='/gossip' element={<CreatePost/>} />
             </>
           ) : (
             <>
-            <Route path="/login" element={<Login/>} />
-            <Route path="/signup" element={<Signup/>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             </>
           )}
         </Routes>
