@@ -17,7 +17,7 @@ function Posts() {
       if (isLoading) {
         return <div>Loading...</div>
       }
-    
+      
     return (
         <div className="posts-page">
             {posts.map((post) => (

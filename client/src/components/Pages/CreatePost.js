@@ -1,20 +1,22 @@
 import React from "react"
+import { useNavigate } from "react-router-dom"
 import ReusableForm from "../UI/ReusableForm"
+import { useDispatch } from 'react-redux'
+import { createPost } from "../../Redux/postsSlice"
 
 function CreatePost() {
-    
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const fields = [
-        { label: 'Gossip', type: 'textarea', placeholder: 'Spill the tea'},
-        { label: 'Hashtags', type: 'text', placeholder: 'Add your hashtags here' }, 
+        { label: 'Gossip', type: 'textarea', placeholder: 'Spill the tea', name: 'body'}
     ]
-    const initialValues = {
-        body: '',
-        post_hashtags: '',
-    }
+    const initialValues = {body: ''}
 
     function handleSubmit(data) {
         console.log('Form submitted with data:', data)
-        // You can handle form submission logic here.
+        dispatch(createPost(data))
+        navigate("/")
     }
 
     return (

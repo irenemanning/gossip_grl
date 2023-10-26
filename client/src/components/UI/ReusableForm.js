@@ -12,7 +12,7 @@ function ReusableForm({ fields, initialValues, onSubmit }) {
     const handleSubmit = (e) => {
       e.preventDefault()
       onSubmit(formValues)
-      setFormValues(initialValues)
+      // setFormValues(initialValues)
     }
   
     return (

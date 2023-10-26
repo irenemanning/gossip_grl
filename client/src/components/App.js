@@ -16,7 +16,7 @@ function App() {
   const user = useSelector((state) => state.user.user)
   const isLoading = useSelector((state) => state.user.isLoading)
   const dispatch = useDispatch()
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -31,7 +31,6 @@ function App() {
       <Router>
         <NavBar user={user} />
         <Routes> 
-          
           {user? (
             <>
             <Route path="/" element={<Posts />} />

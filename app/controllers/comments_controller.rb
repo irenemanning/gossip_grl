@@ -9,6 +9,7 @@ class CommentsController < ApplicationController
         render json: comment
     end
     def create 
+        byebug
         comment = @current_user.comments.create!(comment_params)
         render json: comment, status: :created
     end
@@ -21,8 +22,11 @@ class CommentsController < ApplicationController
     private
 
     def comment_params
-        params.permit(:body, :post_id)
+        params.require(:comment).permit(:body, :post_id)
     end
+    # def comment_params
+    #     params.permit(:body, :post_id)
+    # end
     def find_comment
         @current_user.comments.find_by(params[:id])
     end

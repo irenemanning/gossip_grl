@@ -16,31 +16,29 @@ export const fetchUser = createAsyncThunk('auth/fetchUser', async (_, { dispatch
     } finally {
       dispatch(setLoading(false))
     }
-  })
+})
 
-export const loginUser = createAsyncThunk('auth/loginUser', async ({ username, password }, { dispatch, rejectWithValue }) => {
-  try {
-    const response = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json()
-    console.log(response)
-        if (response.ok) {
-            console.log(data)
-            dispatch(setUser(data))
-            return data;
-        } else {
-            const errorData = await response.json()
-            const errors = getErrors(errorData)
-            return rejectWithValue(errors)
-        }
+export const loginUser = createAsyncThunk('auth/loginUser', async ({ username, password }, { dispatch }) => {
+    try {
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        console.log(data)
+        dispatch(setUser(data))
+        return data
+      } else {
+        const errorData = await response.json()
+        return errorData.errors || [{ message: "An error occurred." }]
+      }
     } catch (error) {
-      const errors = [{ message: "An error occurred." }]
-      return rejectWithValue(errors)
+      return [{ message: "An error occurred." }]
     }
 })
     
@@ -62,41 +60,29 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispat
     }
 })
 
-export const signupUser = createAsyncThunk('auth/signupUser', async ({ username, password, passwordConfirmation }, { dispatch, rejectWithValue }) => {
+export const signupUser = createAsyncThunk('auth/signupUser', async ({ username, password, passwordConfirmation }, { dispatch }) => {
     try {
-    const response = await fetch("/signup", {
+      const response = await fetch("/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        username,
-        password,
-        password_confirmation: passwordConfirmation,
-        }),
-    })
-    const data = await response.json();
-    if (response.ok) {
-        dispatch(setUser(data));
-        return data;
-    } else {
-        const errorData = await response.json()
-        const errors = getErrors(errorData)
-        return rejectWithValue(errors)
-    }
+          username,
+          password,
+          password_confirmation: passwordConfirmation,
+        })
+      })
+      if (response.ok) {
+        const data = await response.json()
+        dispatch(setUser(data))
+        return data
+      }
     } catch (error) {
-      const errors = [{ message: "An error occurred." }]
-      return rejectWithValue(errors)
+      console.error("Signup error:", error)
     }
+    return false
 })
-
-function getErrors(data) {
-    if (data.errors && Array.isArray(data.errors)) {
-        return data.errors
-    }
-    console.log("Invalid error response:", data)
-    return [{ message: "An error occurred." }]
-}
 
 const authSlice = createSlice({
   name: "auth",
@@ -108,13 +94,11 @@ const authSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-        // console.log(state)
-        // console.log(action)
       state.user = action.payload
       state.isAuthenticated = true
     },
     setLoading: (state, action) => {
-        state.isLoading = action.payload;
+        state.isLoading = action.payload
     }
   },
 })

@@ -1,12 +1,13 @@
 class PostsController < ApplicationController
     before_action :authorize
+    
     def index
         posts = Post.all
         render json: posts
     end
     def show
         post = find_post
-        render json: wine
+        render json: post
     end
     def create
         post = @current_user.posts.create!(post_params)
