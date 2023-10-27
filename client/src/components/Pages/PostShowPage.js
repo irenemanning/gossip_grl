@@ -18,9 +18,6 @@ function PostShowPage() {
     ]
    
     function handleSubmitComment(data) {
-        // This doesn't work
-        // const postData = { body: data.body, post_id: post.id };
-        // console.log(data)
         dispatch(createComment(data))
     }
 
@@ -30,7 +27,10 @@ function PostShowPage() {
             <div className="comment-section">
                 <h2>Comments</h2>
                 <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} />
-                {post.comments.map((c)=> <ReusableCard key={c.id} text={c.body} />)}
+                <div className="comments-container">
+                    {post.comments.map((c)=> <ReusableCard key={c.id} text={c.body} />)}   
+                </div>
+                
             </div>   
         </div>
     )

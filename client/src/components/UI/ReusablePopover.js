@@ -1,16 +1,16 @@
 import React from "react";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 
-function ReusablePopover({ trigger, placement, content }) {
+function ReusablePopover({ trigger, placement, children, content }) {
   const popover = (
-    <Popover id="popover-basic">
+    <Popover id="popover-basic" >
       {content}
     </Popover>
   );
 
   return (
     <OverlayTrigger trigger={trigger} placement={placement} overlay={popover}>
-      {props.children}
+      {children}
     </OverlayTrigger>
   );
 }

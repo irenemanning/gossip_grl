@@ -23,7 +23,7 @@ function ReusableForm({ fields, initialValues, onSubmit }) {
             {field.type === 'textarea' ? (
               <Form.Control
                 as="textarea"
-                rows="4" // You can adjust the number of rows
+                rows="2" // You can adjust the number of rows
                 placeholder={field.placeholder}
                 name={field.name}
                 value={formValues[field.name]}

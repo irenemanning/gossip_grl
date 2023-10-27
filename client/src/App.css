@@ -11,4 +11,48 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-bottom: 70px;
+}
+
+.navbar {
+  margin-bottom: 140px;
+}
+
+.profile {
+  width: 70%;
+}
+.user-info {
+  margin-bottom: 70px;
+}
+
+.user-post {
+  display: inline-block;
+  width: 90%;
+  margin: 1%;
+}
+.reusable-card {
+  width: 90%;
+}
+
+.comment-section {
+  margin: 5%;
+}
+.comments-container {
+  margin-top: 5%;
+}
+
+.reusable-card {
+  margin: 1%;
+
+}
+
+.btn-light {
+  justify-content: center; 
+  align-items: center; 
+  float: left;
+  margin-left: 1%;
+}
+
+.user-posts-container {
+  background-color: white;
 }
