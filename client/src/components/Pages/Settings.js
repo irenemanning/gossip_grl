@@ -1,8 +1,11 @@
 import React from "react"
+import { useDispatch } from "react-redux"
 import { Image, ListGroup, Form } from "react-bootstrap"
+import { updateUser } from "../../Redux/authSlice"
 import ReusableForm from "../UI/ReusableForm"
 function Settings({ user }) {
-
+    console.log(user)
+    const dispatch = useDispatch()
     const initialValues = { username: user.username  }
 
     const fields = [
@@ -10,7 +13,10 @@ function Settings({ user }) {
     ]
 
     function handleEditUsername(data) {
-        console.log("data")
+        data = {username: data.username, password: user.password, profile_image: user.profile_image}
+        console.log('Change username Form submitted with data:', data)
+        dispatch(updateUser(data))
+        // navigate()
     }
 
     return (
