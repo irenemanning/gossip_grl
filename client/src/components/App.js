@@ -3,6 +3,7 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser } from '../Redux/authSlice'
 import { fetchPosts } from '../Redux/postsSlice'
+// import { fetchComments } from '../Redux/commentsSlice'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import NavBar from './NavBar'
@@ -18,19 +19,26 @@ import EditPost from './Pages/EditPost'
 function App() {
   const user = useSelector((state) => state.user.user)
   const isLoading = useSelector((state) => state.user.isLoading)
+  // const isLoading = useSelector((state) => state.posts.isLoading)
   const dispatch = useDispatch()
   // const posts = useSelector((state) => state.posts.entities)
 
   useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
+    dispatch(fetchUser())
+    dispatch(fetchPosts())
+    // dispatch(fetchComments())
+  }, [dispatch])
   
-  useEffect(() => {
-      dispatch(fetchPosts())
-    }, [dispatch])
+  // useEffect(() => {
+  //     dispatch(fetchPosts())
+  //   }, [dispatch])
+
+  // useEffect(() => {
+  //   dispatch(fetchComments())
+  // }, [dispatch])
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   return (
@@ -56,7 +64,7 @@ function App() {
         </Routes>
       </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

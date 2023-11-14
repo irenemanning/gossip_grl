@@ -60,6 +60,29 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispat
     }
 })
 
+export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dispatch }) => {
+  dispatch(setLoading(true))
+  try {
+    const response = await fetch(`/me/update`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    })
+    if (response.ok) {
+      const data = await response.json()
+      dispatch(userUpdated(data))
+      return data
+    }
+  } catch (error) {
+    console.error("updateUser error:", error)
+  } finally {
+    dispatch(setLoading(false)) 
+  }
+  return false
+})
+
 export const signupUser = createAsyncThunk('auth/signupUser', async ({ username, password, passwordConfirmation }, { dispatch }) => {
     try {
       const response = await fetch("/signup", {
@@ -97,11 +120,14 @@ const authSlice = createSlice({
       state.user = action.payload
       state.isAuthenticated = true
     },
+    userUpdated: (state, action) => {
+      state.user = action.payload
+    },
     setLoading: (state, action) => {
         state.isLoading = action.payload
     }
   },
 })
 
-export const { setUser, setLoading } = authSlice.actions
+export const { setUser, userUpdated, setLoading } = authSlice.actions
 export default authSlice.reducer

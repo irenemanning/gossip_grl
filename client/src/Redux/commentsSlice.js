@@ -1,34 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-// export const fetchComments = createAsyncThunk("comments/fetchComments", async (commentId, { dispatch, getState }) => {
-//   const { posts } = getState()
-//   const comments = posts.entities
-//     .find((post) => post.id === commentId)
-//     .comments
-//   return comments
-// })
-
-
-//FIX THIS COMMENT DOESN'T POST
-// export const createComment = createAsyncThunk('comments/createComment', async (data, { dispatch }) => {
-//   try {
-//     const response = await fetch("/comments", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(data)
-//     })
-//     if (response.ok) {
-//       const data = await response.json()
-//       dispatch(commentAdded(data))
-//       return data
-//     }
-//   } catch (error) {
-//     console.error("createComment error:", error)
-//   }
-//   return false
-// })
+export const fetchComments = createAsyncThunk('comments/fetchComments', async (_, { dispatch, getState }) => {
+  try {
+    dispatch(setLoading(true))
+    const { posts } = getState()
+    if (!Array.isArray(posts.entities)) {
+      console.error('Posts entities is not an array:', posts.entities)
+      return []
+    }
+    const comments = posts.entities.flatMap((post) => post.comments)
+    dispatch(setComments(comments))
+    return comments
+  } catch (error) {
+    console.error('fetchComments error:', error)
+    throw error
+  } finally {
+    dispatch(setLoading(false))
+  }
+})
 
 export const createComment = createAsyncThunk('comments/createComment', async (data, { dispatch }) => {
   try {
@@ -39,7 +28,6 @@ export const createComment = createAsyncThunk('comments/createComment', async (d
       },
       body: JSON.stringify(data)
     })
-
     if (!response.ok) {
       const responseData = await response.json()
 
@@ -49,10 +37,8 @@ export const createComment = createAsyncThunk('comments/createComment', async (d
 
       throw new Error("Comment creation failed")
     }
-
     const responseData = await response.json()
     dispatch(commentAdded(responseData))
-
     return responseData
   } catch (error) {
     console.error("createComment error:", error)
@@ -80,6 +66,7 @@ const commentsSlice = createSlice({
     reducers: {
       setComments: (state, action) => {
         state.entities = action.payload
+        console.log(action.payload)
       },
       setLoading: (state, action) => {
           state.isLoading = action.payload

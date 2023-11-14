@@ -5,8 +5,11 @@ Rails.application.routes.draw do
   resources :posts
   resources :users
 
-  post "/signup", to: "users#create"
   get "/me", to: "users#show"
+  post "/signup", to: "users#create"
+  patch "/me/update", to: "users#update"
+  delete "/me/delete", to: "users#delete"
+  
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
   

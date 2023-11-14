@@ -33,6 +33,7 @@ function Settings({ user }) {
                         <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleEditUsername} />
                     </ListGroup.Item>
                     {/* <ListGroup.Item>Change Password</ListGroup.Item> */}
+                    {/* <ListGroup.Item>Delete Accout</ListGroup.Item> */}
                 </ListGroup>
             </div>
         </div>
