@@ -6,7 +6,7 @@ import ReusableCard from "../UI/ReusableCard"
 function Posts() {
     const navigate = useNavigate()
     const posts = useSelector((state) => state.posts.entities)
-
+    // console.log(posts)
     return (
         <div className="posts-page">
             {posts.map((post) => (

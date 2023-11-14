@@ -9,8 +9,8 @@ class CommentsController < ApplicationController
         render json: comment
     end
     def create 
-        byebug
-        comment = @current_user.comments.create!(comment_params)
+        post = Post.find(params[:post_id])
+        comment = post.comments.create!(body: params[:body], user_id: @current_user.id)
         render json: comment, status: :created
     end
     def destroy
@@ -21,13 +21,13 @@ class CommentsController < ApplicationController
 
     private
 
-    def comment_params
-        params.require(:comment).permit(:body, :post_id)
-    end
+    # def comment_params
+    #     params.require(:comment).permit(:body, :post_id, :user_id)
+    # end
     # def comment_params
     #     params.permit(:body, :post_id)
     # end
     def find_comment
-        @current_user.comments.find_by(params[:id])
+        Comment.find(params[:id])
     end
 end

@@ -25,6 +25,7 @@ function Profile({user}) {
                 ) : (
                 <Image src={user.profile_image} />
                 )}
+                <h6 onClick={() => navigate('/profile/settings')}>Settings</h6>
             </div>
             
             {userPosts.map((post)=> (

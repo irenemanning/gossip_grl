@@ -29,14 +29,15 @@ export const createPost = createAsyncThunk('posts/createPost', async (data, { di
       body: JSON.stringify(data)
     })
     if (response.ok) {
-      const data = await response.json()
-      dispatch(postAdded(data))
-      return data
+      const newPost = await response.json()
+      console.log(newPost)
+      dispatch(postAdded(newPost)) 
+      return newPost
     }
   } catch (error) {
     console.error("createPost error:", error)
   } finally {
-    dispatch(setLoading(false)) 
+    dispatch(setLoading(false))
   }
   return false
 })
@@ -89,9 +90,9 @@ const postsSlice = createSlice({
           state.isLoading = action.payload
       },
       postAdded: (state, action) => {
-        const { body } = action.payload
+        const { id, body } = action.payload
         console.log(action.payload)
-        state.entities.push({body: body})
+        state.entities.push({ id: id, body: body })
       },
       postUpdated(state, action) {
         console.log(action.payload)
@@ -104,7 +105,6 @@ const postsSlice = createSlice({
         })
       },
       postRemoved(state, action) {
-        console.log(action.payload)
         state.entities = state.entities.filter((post) => post.id !== action.payload)
       }
     },

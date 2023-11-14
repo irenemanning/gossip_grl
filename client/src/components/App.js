@@ -9,6 +9,7 @@ import NavBar from './NavBar'
 import Login from './Pages/Login'
 import Signup from './Pages/Signup'
 import Profile from './Pages/Profile'
+import Settings from './Pages/Settings'
 import Posts from './Pages/Posts'
 import PostShowPage from './Pages/PostShowPage'
 import CreatePost from './Pages/CreatePost'
@@ -42,8 +43,9 @@ function App() {
             <Route path="/" element={<Posts />} />
             <Route path="/profile" element={<Profile user={user} />} />
             <Route path="/edit/:id" element={<EditPost user={user} />} />
-            <Route path='/gossip/:id' element={<PostShowPage />} />
+            <Route path='/gossip/:id' element={<PostShowPage user={user} />} />
             <Route path='/gossip' element={<CreatePost/>} />
+            <Route path='/profile/settings' element={<Settings user={user} />} />
             </>
           ) : (
             <>
