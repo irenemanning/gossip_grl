@@ -17,12 +17,15 @@ function Posts() {
     function renderPostBodyWithBlueHashtags (body) {
         return body.replace(/#\w+/g, '<span style="color: #FF038D">$&</span>')
     }
+    const onHashtagClick = (hashtag) => {
+        console.log(`Hashtag clicked: ${hashtag}`)
+    }
   
     return (
         <div className="posts-page">
             {posts.map((post) => (
                 <div key={post.id} onClick={()=>{navigate(`/gossip/${post.id}`)}}>
-                    <ReusableCard  text={renderPostBodyWithBlueHashtags(post.body)} />
+                    <ReusableCard  text={renderPostBodyWithBlueHashtags(post.body)} onClick={onHashtagClick}/>
                 </div>
             ))}
         </div>
