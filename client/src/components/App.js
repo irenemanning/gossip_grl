@@ -3,9 +3,9 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser } from '../Redux/authSlice'
 import { fetchPosts } from '../Redux/postsSlice'
-// import { fetchComments } from '../Redux/commentsSlice'
+import { fetchComments } from '../Redux/commentsSlice'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import NavBar from './NavBar'
 import Login from './Pages/Login'
 import Signup from './Pages/Signup'
@@ -17,49 +17,43 @@ import CreatePost from './Pages/CreatePost'
 import EditPost from './Pages/EditPost'
 
 function App() {
-  const user = useSelector((state) => state.user.user)
-  const isLoading = useSelector((state) => state.user.isLoading)
-  // const isLoading = useSelector((state) => state.posts.isLoading)
+  const user = useSelector((state) => state.auth.user)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const isLoading = useSelector((state) => state.auth.isLoading)
+  const isLoadingComments = useSelector((state) => state.comments.isLoadingComments)
   const dispatch = useDispatch()
-  // const posts = useSelector((state) => state.posts.entities)
-
-  useEffect(() => {
-    dispatch(fetchUser())
-    dispatch(fetchPosts())
-    // dispatch(fetchComments())
-  }, [dispatch])
   
-  // useEffect(() => {
-  //     dispatch(fetchPosts())
-  //   }, [dispatch])
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(fetchUser())
+      await dispatch(fetchPosts())
+      dispatch(fetchComments())
+    }
+    fetchData()
+  }, [dispatch, isAuthenticated])
 
-  // useEffect(() => {
-  //   dispatch(fetchComments())
-  // }, [dispatch])
-
-  if (isLoading) {
+  if (isLoading || isLoadingComments) {
     return <div>Loading...</div>
   }
-
+ 
   return (
     <div className="App">
       <Router>
         <NavBar user={user} />
-        <Routes> 
-          {user? (
+        <Routes>
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+          <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signup />} />
+          {isAuthenticated ? (
             <>
-            <Route path="/" element={<Posts />} />
-            <Route path="/profile" element={<Profile user={user} />} />
-            <Route path="/edit/:id" element={<EditPost user={user} />} />
-            <Route path='/gossip/:id' element={<PostShowPage user={user} />} />
-            <Route path='/gossip' element={<CreatePost/>} />
-            <Route path='/profile/settings' element={<Settings user={user} />} />
+              <Route path="/" element={<Posts />} />
+              <Route path="/profile" element={<Profile user={user} />} />
+              <Route path="/edit/:id" element={<EditPost />} />
+              <Route path="/gossip/:id" element={<PostShowPage user={user} />} />
+              <Route path="/gossip" element={<CreatePost />} />
+              <Route path="/profile/settings" element={<Settings user={user} />} />
             </>
           ) : (
-            <>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            </>
+            <Route path="/" element={<Navigate to="/login" />} />
           )}
         </Routes>
       </Router>

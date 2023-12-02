@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    skip_before_action :authorize, only: :create
+    skip_before_action :authorize, only: [:create]
 
     #  /me
     def show
@@ -16,27 +16,46 @@ class UsersController < ApplicationController
             render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
     end
+    # def update 
+    #     # @current_user.update!(params[:user])
+    #     # render json: @current_user
+    # end
+
     def update
-        # @current_user.update!(user_params)
-        # render json: @current_user
-        if params[:username].present?
-            @current_user.update!(username: params[:username])
+        # if params[:user][:profile_image].present?
+        if params[:user][:profile_image].present? && params[:user][:profile_image].respond_to?(:read)
+          if @current_user.update(profile_image: params[:user][:profile_image])
             render json: @current_user
-        elsif params[:password].present?
-            @current_user.update!(password: params[:password], password_confirmation: params[:password_confirmation])
-            render json: @current_user
-        elsif params[:profile_image].present?
-            @current_user.update!(profile_image: params[:profile_image])
-            render json: @current_user
+          else
+            render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
+          end
         else
-            render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+          if @current_user.update(user_params)
+            render json: @current_user
+          else
+            render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
+          end
+        end
+    end
+    
+    def delete
+        password = params[:password]
+        if @current_user.authenticate(password)
+        @current_user.destroy
+        reset_session
+        render json: { message: 'Account deleted successfully' }
+        else
+        render json: { errors: ['Invalid password'] }, status: :unprocessable_entity
         end
     end
 
     private
 
+    # def user_params
+    #     params.permit(:username, :password, :password_confirmation, :profile_image)
+    # end
     def user_params
-        params.permit(:username, :password, :password_confirmation, :profile_image)
+        params.require(:user).permit(:username, :password, :password_confirmation, :profile_image)
     end
 
 end

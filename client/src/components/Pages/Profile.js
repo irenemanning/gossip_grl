@@ -21,9 +21,9 @@ function Profile({user}) {
             <div className="user-info">
                 <h1>{user.username}</h1>
                 {user.profile_image === null ? (
-                <Image src="Profile-Placeholder.jpg" style={{height: "100px", width: "100px"}}  />
+                <Image src="/Profile-Placeholder.jpg" style={{height: "100px", width: "100px"}}  />
                 ) : (
-                <Image src={user.profile_image} />
+                <Image src={user.profile_image} style={{height: "100px", width: "100px"}} />
                 )}
                 <h6 onClick={() => navigate('/profile/settings')}>Settings</h6>
             </div>

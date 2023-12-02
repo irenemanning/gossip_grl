@@ -1,12 +1,19 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+
 import ReusableCard from "../UI/ReusableCard"
 
 function Posts() {
-    const navigate = useNavigate()
     const posts = useSelector((state) => state.posts.entities)
-    // console.log(posts)
+    const isLoadingPosts = useSelector((state) => state.posts.isLoadingPosts)
+    // const dispatch = useDispatch()
+    const navigate = useNavigate()
+console.log(posts)
+      if (isLoadingPosts) {
+        return <div>Loading...</div>
+      }
+  
     return (
         <div className="posts-page">
             {posts.map((post) => (

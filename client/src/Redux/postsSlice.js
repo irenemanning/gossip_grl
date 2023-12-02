@@ -1,5 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
+const handleErrors = async (response, dispatch) => {
+  if (!response.ok) {
+    const errorData = await response.json()
+    dispatch(setErrors(errorData.errors || [{ message: "An error occurred." }]))
+    return { payload: undefined, errors: errorData.errors || [{ message: "An error occurred." }] }
+  }
+  return { payload: await response.json(), errors: [] }
+}
+
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (_, { dispatch, rejectWithValue }) => {
   try {
     dispatch(setLoading(true))
@@ -19,32 +28,30 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (_, { dispa
 })
 
 export const createPost = createAsyncThunk('posts/createPost', async (data, { dispatch }) => {
-  dispatch(setLoading(true))
-  try {
-    const response = await fetch("/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data)
-    })
-    if (response.ok) {
-      const newPost = await response.json()
-      console.log(newPost)
-      dispatch(postAdded(newPost)) 
-      return newPost
+    try {
+      dispatch(setLoading(true))
+      const response = await fetch("/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+      const result = await handleErrors(response, dispatch)
+      if (result.errors.length === 0) {
+        dispatch(postAdded(result.payload))
+      }
+      return result
+    } finally {
+      dispatch(setLoading(false))
     }
-  } catch (error) {
-    console.error("createPost error:", error)
-  } finally {
-    dispatch(setLoading(false))
   }
-  return false
-})
+)
 
 export const updatePost = createAsyncThunk('posts/updatePost', async (data, { dispatch }) => {
-  dispatch(setLoading(true))
   try {
+    console.log(data)
+    dispatch(setLoading(true))
     const response = await fetch(`/posts/${data.id}`, {
       method: "PATCH",
       headers: {
@@ -52,17 +59,20 @@ export const updatePost = createAsyncThunk('posts/updatePost', async (data, { di
       },
       body: JSON.stringify(data)
     })
-    if (response.ok) {
-      const data = await response.json()
-      dispatch(postUpdated(data))
-      return data
+    const { payload, errors } = await handleErrors(response, dispatch)
+    
+    if (errors.length === 0) {
+      dispatch(postUpdated(payload))
+    } else {
+      console.error("Edit post failed:", errors);
     }
+
+    return { payload, errors };
   } catch (error) {
-    console.error("updatePost error:", error)
+    throw error;
   } finally {
-    dispatch(setLoading(false)) 
+    dispatch(setLoading(false))
   }
-  return false
 })
 
 export const deletePost = createAsyncThunk('posts/deletePost', async (postId, { dispatch }) => {
@@ -79,36 +89,37 @@ const postsSlice = createSlice({
     name: "posts",
     initialState: {
       entities: [],
-      isLoading: false,
+      isLoadingPosts: false,
       errors: []
     },
     reducers: {
       setPosts: (state, action) => {
         state.entities = action.payload
       },
-      setLoading: (state, action) => {
-          state.isLoading = action.payload
-      },
       postAdded: (state, action) => {
         const { id, body } = action.payload
-        console.log(action.payload)
-        state.entities.push({ id: id, body: body })
+        state.entities.unshift({ id: id, body: body })
+        state.errors = []
       },
       postUpdated(state, action) {
-        console.log(action.payload)
         const updatedPost = action.payload
         state.entities = state.entities.map(post => {
-          if (post.id === updatedPost.id) {
-            return updatedPost
-          }
-          return post
+          return post.id === updatedPost.id ? updatedPost : post
         })
+        state.errors = []
       },
       postRemoved(state, action) {
         state.entities = state.entities.filter((post) => post.id !== action.payload)
+      },
+      setLoading: (state, action) => {
+          state.isLoadingPosts = action.payload
+      },
+      setErrors: (state, action) => {
+        state.errors = action.payload
+        console.log(action.payload)
       }
     },
   })
   
-  export const { setPosts, setLoading, postAdded, postRemoved, postUpdated } = postsSlice.actions
+  export const { setPosts, postAdded, postRemoved, postUpdated, setLoading, setErrors } = postsSlice.actions
   export default postsSlice.reducer

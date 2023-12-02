@@ -1,5 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
+const handleErrors = async (response, dispatch) => {
+  if (!response.ok) {
+    const errorData = await response.json()
+    dispatch(setErrors(errorData.errors || [{ message: "An error occurred." }]))
+    return { payload: undefined, errors: errorData.errors || [{ message: "An error occurred." }] }
+  }
+  return { payload: await response.json(), errors: [] }
+}  
+
 export const fetchComments = createAsyncThunk('comments/fetchComments', async (_, { dispatch, getState }) => {
   try {
     dispatch(setLoading(true))
@@ -21,66 +30,66 @@ export const fetchComments = createAsyncThunk('comments/fetchComments', async (_
 
 export const createComment = createAsyncThunk('comments/createComment', async (data, { dispatch }) => {
   try {
-    const response = await fetch("/comments", {
+    dispatch(setLoading(true))
+    const { payload, errors } = await handleErrors(await fetch("/comments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data)
-    })
-    if (!response.ok) {
-      const responseData = await response.json()
-
-      if (responseData.errors) {
-        console.error("Comment creation failed:", responseData.errors)
-      }
-
+    }), dispatch)
+    if (errors.length > 0) {
       throw new Error("Comment creation failed")
     }
-    const responseData = await response.json()
-    dispatch(commentAdded(responseData))
-    return responseData
+    dispatch(commentAdded(payload))
+    return payload
   } catch (error) {
-    console.error("createComment error:", error)
     throw error
+  } finally {
+    dispatch(setLoading(false))
   }
 })
 
 export const deleteComment = createAsyncThunk('comments/deleteComment', async (commentId, { dispatch }) => {
-  dispatch(setLoading(true))
-  const response = await fetch(`/comments/${commentId}`, { method: 'DELETE' })
-  if (response.ok) {
-    dispatch(commentRemoved(commentId))
+  try {
+    dispatch(setLoading(true))
+    const response = await fetch(`/comments/${commentId}`, { method: 'DELETE' })
+    if (response.ok) dispatch(commentRemoved(commentId))
     return commentId
+  } catch (error) {
+    console.error('deleteComment error:', error)
+    throw error
+  } finally {
+    dispatch(setLoading(false))
   }
-  throw new Error('Failed to delete the post')
 })
 
 const commentsSlice = createSlice({
     name: "comments",
     initialState: {
       entities: [],
-      isLoading: false,
+      isLoadingComments: false,
       errors: []
     },
     reducers: {
       setComments: (state, action) => {
         state.entities = action.payload
-        console.log(action.payload)
-      },
-      setLoading: (state, action) => {
-          state.isLoading = action.payload
       },
       commentAdded: (state, action) => {
-        const { body, post_id, user_id } = action.payload
-        state.entities.push({body: body, post_id: post_id, user_id: user_id})
+        const newComment = action.payload
+        state.entities.push(newComment)
       },
       commentRemoved: (state, action) => {
-        console.log(action.payload)
         state.entities = state.entities.filter((comment) => comment.id !== action.payload)
+      },
+      setLoading: (state, action) => {
+          state.isLoadingComments = action.payload
+      },
+      setErrors: (state, action) => {
+        state.errors = action.payload
       }
     },
   })
   
-  export const { setComments, setLoading, commentAdded, commentRemoved } = commentsSlice.actions
+  export const { setComments, commentAdded, commentRemoved, setLoading, setErrors } = commentsSlice.actions
   export default commentsSlice.reducer

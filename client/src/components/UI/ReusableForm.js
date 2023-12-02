@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Form } from "react-bootstrap"
 
-function ReusableForm({ fields, initialValues, onSubmit }) {
+function ReusableForm({ fields, initialValues, onSubmit, submitBtnText, errors, btnVariant }) {
     const [formValues, setFormValues] = useState(initialValues)
   
     const handleChange = (e) => {
@@ -12,18 +12,18 @@ function ReusableForm({ fields, initialValues, onSubmit }) {
     const handleSubmit = (e) => {
       e.preventDefault()
       onSubmit(formValues)
-      // setFormValues(initialValues)
+      console.log(errors)
     }
-  
+    
     return (
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className='reusable-form'>
         {fields.map((field) => (
-          <Form.Group key={field.label}>
-            <Form.Label>{field.label}</Form.Label>
+          <Form.Group className='mb-3 row' key={field.label}>
+            <Form.Label className='col-sm-2' >{field.label}</Form.Label>
             {field.type === 'textarea' ? (
               <Form.Control
                 as="textarea"
-                rows="2" // You can adjust the number of rows
+                rows="2"
                 placeholder={field.placeholder}
                 name={field.name}
                 value={formValues[field.name]}
@@ -40,8 +40,15 @@ function ReusableForm({ fields, initialValues, onSubmit }) {
             )}
           </Form.Group>
         ))}
-        <Button variant="dark" type="submit">
-          Submit
+        {errors.length > 0 && (
+            <div style={{color: "red", listStylePosition: "inside"}}>
+            {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+            ))}
+            </div>
+        )}
+        <Button variant={btnVariant ? btnVariant : "dark"} type="submit">
+          {submitBtnText}
         </Button>
       </Form>
     )

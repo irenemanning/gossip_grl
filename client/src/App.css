@@ -56,3 +56,14 @@
 .user-posts-container {
   background-color: white;
 }
+
+.reusable-form {
+  padding: 1%;
+  padding-bottom: 6%;
+}
+
+.form-div {
+  color: black;
+  background-color: white;
+  padding: 3%;
+}

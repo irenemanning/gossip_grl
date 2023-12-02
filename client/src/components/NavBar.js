@@ -1,13 +1,16 @@
 import React from "react"
 import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { logoutUser } from "../Redux/authSlice"
 import { Nav, Navbar, Container, Offcanvas } from "react-bootstrap"
 
 function NavBar({user}){
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     function handleLogout(user) {
         dispatch(logoutUser(user))
+        navigate("/login")
     }
 
     return (
@@ -16,7 +19,7 @@ function NavBar({user}){
             <Navbar fixed="top"  key={expand} expand={expand} className="bg-body-tertiary mb-3">
             <Container fluid style={{marginLeft: "5px", marginRight: "5px"}}>
                 <Navbar.Brand href="/">
-                    <img src="ggicon.png" alt="Logo"
+                    <img src="/ggicon.png" alt="Logo"
                     style={{height: "80px", width: "80px", marginRight: "20px"}}
                     />
                 </Navbar.Brand>

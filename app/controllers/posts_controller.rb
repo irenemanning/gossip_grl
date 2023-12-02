@@ -2,7 +2,7 @@ class PostsController < ApplicationController
     before_action :authorize
     
     def index
-        posts = Post.all
+        posts = Post.all.order(created_at: :desc)
         render json: posts
     end
     def show
@@ -17,7 +17,7 @@ class PostsController < ApplicationController
     end
     def update
         post = @current_user.posts.find_by(id: params[:id])
-        post.update(post_params)
+        post.update!(post_params)
         hashtags = extract_hashtags_from_post_body(post.body)
         post.hashtags << hashtags.map { |tag| Hashtag.find_or_create_by(tag: tag) }
         render json: post

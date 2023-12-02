@@ -2,7 +2,6 @@ import React, {useEffect} from "react"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import { createComment, deleteComment } from "../../Redux/commentsSlice"
-import { fetchComments } from "../../Redux/commentsSlice"
 import ReusableCard from "../UI/ReusableCard"
 import ReusableForm from "../UI/ReusableForm"
 import ReusablePopover from "../UI/ReusablePopover"
@@ -10,18 +9,15 @@ import { Button } from "react-bootstrap"
 
 function PostShowPage({ user }) {
     const dispatch = useDispatch()
-    const posts = useSelector((state) => state.posts.entities)
+    const posts = useSelector((state) => state.posts.entities) 
     const { id } = useParams()
     const post = posts.find((post) => post.id === parseInt(id))
-    const comments = useSelector((state) => state.comments.entities).filter(c => c.post_id == post.id)
-    // console.log(post)
-    // console.log(comments)
+    const comments = useSelector((state) => state.comments.entities)
+    const postComments = comments.filter((c) => c.post_id === parseInt(id))
+    const errors = useSelector((state) => state.comments.errors)
 
-    useEffect(() => {
-        dispatch(fetchComments())
-    }, [dispatch])
-
-    const initialValues = { post_id: post.id, body: ''  }
+    // const initialValues = { post_id: post.id, body: ''  }
+    const initialValues = { post_id: post?.id || 0, body: ''  }
 
     const fields = [
         { label: 'Leave a Comment', type: 'textarea', placeholder: 'Leave a comment', name: 'body'}
@@ -34,16 +30,16 @@ function PostShowPage({ user }) {
     function handleDeleteComment(data) {
         dispatch(deleteComment(data))
     }
-
+console.log(postComments)
     return (
         <div className="post-show-page">
             {post && <ReusableCard text={post.body} />}
             <div className="comment-section">
                 <h2>Comments</h2>
-                <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} />
+                <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} submitBtnText="Leave Comment" errors={errors} />
                 <div className="comments-container">
                     {/*  post && post.comments && post.comments.map((c)  */}
-                    {post && comments.map((c) => (
+                    {postComments && postComments.map((c) => (
                         <div className="user-post" key={c.id}>
                            <ReusableCard  text={c.body} />
                            {user.id == c.user_id ? (

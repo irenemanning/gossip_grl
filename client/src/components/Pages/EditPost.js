@@ -10,12 +10,27 @@ function EditPost() {
     const { id } = useParams()
     const posts = useSelector((state) => state.posts.entities)
     const postBeingEdited = posts.find((post) => post.id === parseInt(id))
+    const errors = useSelector((state) => state.posts.errors)
 
-    function handleEditPost(data) {
-        data = {id: id, body: data.body}
-        console.log('Form submitted with data:', data)
-        dispatch(updatePost(data))
-        navigate(`/gossip/${data.id}`)
+    // function handleEditPost(data) {
+    //     data = {id: id, body: data.body}
+    //     console.log('Form submitted with data:', data)
+    //     dispatch(updatePost(data))
+        // navigate(`/gossip/${data.id}`)
+    // }
+   
+    const handleEditPost = async (data) => {
+        console.log(data)
+      try {
+        const result = await dispatch(updatePost({ id: id, body: data.body }))
+        if (result.payload && result.payload.errors && result.payload.errors.length === 0) {
+          navigate(`/profile`)
+        } else {
+          console.error("Error editing post:", result.payload ? result.payload.errors : "Payload is undefined")
+        }
+      } catch (error) {
+        console.error('Error editing post:', error)
+      }
     }
 
     const initialValues = { body: postBeingEdited.body  }
@@ -26,7 +41,7 @@ function EditPost() {
 
     return (
         <div>
-            <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleEditPost} />
+            <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleEditPost} submitBtnText={"Post"} errors={errors} />
         </div>
     )
 }

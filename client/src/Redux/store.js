@@ -4,7 +4,7 @@ import postsReducer from "./postsSlice"
 import commentsReducer from "./commentsSlice"
 const store = configureStore({
     reducer: {
-      user: authReducer,
+      auth: authReducer,
       posts: postsReducer,
       comments: commentsReducer
     },
