@@ -32,7 +32,7 @@ export const loginUser = createAsyncThunk(
       })
       if (!response.ok) {
         const errorData = await response.json()
-        dispatch(setErrors(errorData.errors || [{ message: "An error occurred." }]))
+        dispatch(setErrors(errorData.errors || ['An error occurred.']))
         throw new Error("Login failed")
       }
       const data = await response.json()
@@ -49,25 +49,24 @@ export const loginUser = createAsyncThunk(
 
 export const signupUser = createAsyncThunk(
   'auth/signupUser',
-  async ({ username, password, passwordConfirmation }, { dispatch }) => {
+  async (data, { dispatch }) => {
     try {
       dispatch(setLoading(true))
-
       const response = await fetch("/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, password_confirmation: passwordConfirmation, }),
+        body: JSON.stringify({ user: data }),
       })
       if (!response.ok) {
         const errorData = await response.json()
-        dispatch(setErrors(errorData.errors || [{ message: "An error occurred." }]))
+        dispatch(setErrors(errorData.errors || ["An error occurred."]))
         throw new Error("Sign up failed")
       }
-      const data = await response.json()
-      dispatch(setUser(data))
-      return data
+      const responseData = await response.json()
+      dispatch(setUser(responseData))
+      return responseData
     } catch (error) {
       console.error("Sign up failed:", error)
       throw error
@@ -76,6 +75,34 @@ export const signupUser = createAsyncThunk(
     }
   }
 )
+// export const signupUser = createAsyncThunk(
+//   'auth/signupUser',
+//   async ({ username, password, passwordConfirmation }, { dispatch }) => {
+//     try {
+//       dispatch(setLoading(true))
+//       const response = await fetch("/signup", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ username: username, password: password, password_confirmation: passwordConfirmation }),
+//       })
+//       if (!response.ok) {
+//         const errorData = await response.json()
+//         dispatch(setErrors(errorData.errors || ["An error occurred."]))
+//         throw new Error("Sign up failed")
+//       }
+//       const data = await response.json()
+//       dispatch(setUser(data))
+//       return data
+//     } catch (error) {
+//       console.error("Sign up failed:", error)
+//       throw error
+//     } finally {
+//       dispatch(setLoading(false))
+//     }
+//   }
+// )
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispatch }) => {
     try {
@@ -95,10 +122,10 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispat
     }
 })
 
-// make sure this conditionally dispatches errors based on username or password being Present in data
+    // make sure this conditionally dispatches errors based on username or password being Present in data
+
 export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dispatch }) => {
   dispatch(setLoading(true))
-
   try {
     const response = await fetch("/me/update", {
       method: "PATCH",
@@ -107,21 +134,14 @@ export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dis
       },
       body: JSON.stringify(data),
     })
-
+    console.log(data)
     if (!response.ok) {
       const errorData = await response.json()
       const errors = errorData.errors || ['An error occurred']
       console.error('Update user errors:', errors)
-      console.log(data)
-      if (data.user && data.user.username) {
-        dispatch(setUsernameErrors(errors))
-      } else if (data.user && data.user.password) {
-        dispatch(setPasswordErrors(errors))
-      }
-
+      dispatch(setUpdateErrors(errors))
       throw new Error('Update user failed')
     }
-
     const responseData = await response.json()
     dispatch(userUpdated(responseData))
     return responseData
@@ -130,37 +150,8 @@ export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dis
   } finally {
     dispatch(setLoading(false))
   }
-
   return false
 })
-
-// export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dispatch }) => {
-//   dispatch(setLoading(true))
-//   try {
-//     const response = await fetch("/me/update", {
-//       method: "PATCH",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(data),
-//     })
-//     if (!response.ok) {
-//       const errorData = await response.json()
-//       const errors = errorData.errors || ['An error occurred']
-//       console.error('Update user errors:', errors)
-//       dispatch(setUsernameErrors(errors))
-//       throw new Error('Update user failed')
-//     }
-//     const responseData = await response.json()
-//     dispatch(userUpdated(responseData))
-//     return responseData
-//   } catch (error) {
-//     console.error('updateUser error:', error)
-//   } finally {
-//     dispatch(setLoading(false))
-//   }
-//   return false
-// })
 
 export const updateProfileImage = createAsyncThunk('auth/updateProfileImage', async (data, { dispatch }) => {
   dispatch(setLoading(true))
@@ -226,6 +217,8 @@ const authSlice = createSlice({
     userUpdated: (state, action) => {
       state.user = action.payload
       state.errors = []
+      state.usernameErrors = []
+      state.passwordErrors = []
     },
     userRemoved: (state, action) => {
       state.user = null
@@ -237,11 +230,15 @@ const authSlice = createSlice({
     setProfileImageErrors: (state, action) => {
       state.profileImageErrors = action.payload
     },
-    setUsernameErrors: (state, action) => {
-      state.usernameErrors = action.payload
-    },
-    setPasswordErrors: (state, action) => {
-      state.passwordErrors = action.payload
+    setUpdateErrors: (state, action) => {
+      const errors = action.payload
+      if (errors.some(error => error.includes('Username'))) {
+        state.usernameErrors = errors
+      } else if (errors.some(error => error.includes('Password'))) {
+        state.passwordErrors = errors
+      } else {
+        state.errors = errors
+      }
     },
     setErrors: (state, action) => {
       state.errors = action.payload
@@ -249,5 +246,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { setUser, userUpdated, userRemoved, setLoading, setErrors, setProfileImageErrors, setUsernameErrors, setPasswordErrors } = authSlice.actions
+export const { setUser, userUpdated, userRemoved, setLoading, setErrors, setProfileImageErrors, setUpdateErrors } = authSlice.actions
 export default authSlice.reducer

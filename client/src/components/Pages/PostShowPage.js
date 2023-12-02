@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import { createComment, deleteComment } from "../../Redux/commentsSlice"
@@ -30,10 +30,14 @@ function PostShowPage({ user }) {
     function handleDeleteComment(data) {
         dispatch(deleteComment(data))
     }
+
+    function renderPostBodyWithBlueHashtags (body) {
+        return body.replace(/#\w+/g, '<span style="color: #FF038D">$&</span>')
+    }
 console.log(postComments)
     return (
         <div className="post-show-page">
-            {post && <ReusableCard text={post.body} />}
+            {post && <ReusableCard text={renderPostBodyWithBlueHashtags(post.body)} />}
             <div className="comment-section">
                 <h2>Comments</h2>
                 <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} submitBtnText="Leave Comment" errors={errors} />
@@ -42,7 +46,7 @@ console.log(postComments)
                     {postComments && postComments.map((c) => (
                         <div className="user-post" key={c.id}>
                            <ReusableCard  text={c.body} />
-                           {user.id == c.user_id ? (
+                           {user.id === c.user_id ? (
                                 <ReusablePopover trigger="click" placement="right" 
                                 content={(
                                     <div className="popover-btns">

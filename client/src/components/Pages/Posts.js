@@ -7,18 +7,22 @@ import ReusableCard from "../UI/ReusableCard"
 function Posts() {
     const posts = useSelector((state) => state.posts.entities)
     const isLoadingPosts = useSelector((state) => state.posts.isLoadingPosts)
-    // const dispatch = useDispatch()
+
     const navigate = useNavigate()
-console.log(posts)
-      if (isLoadingPosts) {
+
+    if (isLoadingPosts) {
         return <div>Loading...</div>
-      }
+    }
+
+    function renderPostBodyWithBlueHashtags (body) {
+        return body.replace(/#\w+/g, '<span style="color: #FF038D">$&</span>')
+    }
   
     return (
         <div className="posts-page">
             {posts.map((post) => (
                 <div key={post.id} onClick={()=>{navigate(`/gossip/${post.id}`)}}>
-                    <ReusableCard  text={post.body} />
+                    <ReusableCard  text={renderPostBodyWithBlueHashtags(post.body)} />
                 </div>
             ))}
         </div>
