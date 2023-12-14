@@ -96,9 +96,11 @@ const postsSlice = createSlice({
         state.entities = action.payload
       },
       postAdded: (state, action) => {
-        const { id, body } = action.payload
-        state.entities.unshift({ id: id, body: body })
+        const { id, body, hashtags } = action.payload
+        const newPost = { id, body, hashtags }
+        state.entities = [newPost, ...state.entities]
         state.errors = []
+        state.filteredPosts = [...state.filteredPosts, newPost]
       },
       postUpdated(state, action) {
         const updatedPost = action.payload
