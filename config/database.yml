@@ -78,12 +78,6 @@ test:
 #
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
-#
-# production:
-#   <<: *default
-#   database: gossip_grl_production
-#   username: gossip_grl
-#   password: <%= ENV["GOSSIP_GRL_DATABASE_PASSWORD"] %>
 
 production:
   <<: *default

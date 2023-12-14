@@ -1,11 +1,13 @@
 import React from "react"
+import { Button } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import { createComment, deleteComment } from "../../Redux/commentsSlice"
 import ReusableCard from "../UI/ReusableCard"
 import ReusableForm from "../UI/ReusableForm"
 import ReusablePopover from "../UI/ReusablePopover"
-import { Button } from "react-bootstrap"
+import Posts from "./Posts"
+
 
 function PostShowPage({ user }) {
     const dispatch = useDispatch()
@@ -16,7 +18,6 @@ function PostShowPage({ user }) {
     const postComments = comments.filter((c) => c.post_id === parseInt(id))
     const errors = useSelector((state) => state.comments.errors)
 
-    // const initialValues = { post_id: post.id, body: ''  }
     const initialValues = { post_id: post?.id || 0, body: ''  }
 
     const fields = [
@@ -30,44 +31,38 @@ function PostShowPage({ user }) {
     function handleDeleteComment(data) {
         dispatch(deleteComment(data))
     }
-
-    function renderPostBodyWithBlueHashtags (body) {
-        return body.replace(/#\w+/g, '<span style="color: #FF038D">$&</span>')
-    }
-console.log(postComments)
+    
     return (
-        <div className="post-show-page">
-            {post && <ReusableCard text={renderPostBodyWithBlueHashtags(post.body)} />}
-            <div className="comment-section">
-                <h2>Comments</h2>
-                <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} submitBtnText="Leave Comment" errors={errors} />
-                <div className="comments-container">
-                    {/*  post && post.comments && post.comments.map((c)  */}
-                    {postComments && postComments.map((c) => (
-                        <div className="user-post" key={c.id}>
-                           <ReusableCard  text={c.body} />
-                           {user.id === c.user_id ? (
-                                <ReusablePopover trigger="click" placement="right" 
-                                content={(
-                                    <div className="popover-btns">
-                                    <Button
-                                        variant="outline-danger"
-                                        size="sm"
-                                        onClick={() => handleDeleteComment(c.id)}
-                                    >
-                                        Delete
-                                    </Button>
-                                    </div>
-                                )} >
-                                    <Button variant="light" >...</Button>
-                                </ReusablePopover>
-                           ) 
-                           : (null)} 
+        <div className="posts">
+            {post && <Posts posts={[post]} />}
+            <h2>Comments</h2>
+            <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} submitBtnText="Leave Comment" errors={errors} />
+            <div className="comments-section">
+                {postComments && postComments.map((c) => (
+                <div className="comment-container" key={c.id}>
+                    <ReusableCard  text={c.body} />
+                    {user.id === c.user_id ? (
+                        <div className="reusable-popover">
+                            <ReusablePopover trigger="click" placement="right" 
+                            content={(
+                                <div className="popover-btns">
+                                <Button
+                                    variant="outline-danger"
+                                    size="sm"
+                                    onClick={() => handleDeleteComment(c.id)}
+                                >
+                                    Delete
+                                </Button>
+                                </div>
+                            )} >
+                            <Button variant="light" >...</Button>
+                            </ReusablePopover>
                         </div>
-                        )
-                    )}
+                        
+                    ) : (null)} 
                 </div>
-            </div>   
+                ))}
+            </div>
         </div>
     )
 }

@@ -89,6 +89,7 @@ const postsSlice = createSlice({
     name: "posts",
     initialState: {
       entities: [],
+      filteredPosts: [],
       isLoadingPosts: false,
       errors: []
     },
@@ -112,14 +113,17 @@ const postsSlice = createSlice({
         state.entities = state.entities.filter((post) => post.id !== action.payload)
       },
       setLoading: (state, action) => {
-          state.isLoadingPosts = action.payload
+        state.isLoadingPosts = action.payload
       },
       setErrors: (state, action) => {
         state.errors = action.payload
         console.log(action.payload)
+      },
+      setFilteredPosts(state, action) {
+        state.filteredPosts = action.payload
       }
     },
   })
   
-  export const { setPosts, postAdded, postRemoved, postUpdated, setLoading, setErrors } = postsSlice.actions
+  export const { setPosts, postAdded, postRemoved, postUpdated, setLoading, setErrors, setFilteredPosts } = postsSlice.actions
   export default postsSlice.reducer

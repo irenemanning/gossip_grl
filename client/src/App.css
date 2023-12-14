@@ -18,28 +18,39 @@
   margin-bottom: 140px;
 }
 
-.profile {
-  width: 70%;
-}
-.user-info {
-  margin-bottom: 70px;
-}
-
-.user-post {
+.posts {
+  position: relative;
   display: inline-block;
-  width: 90%;
   margin: 1%;
+}
+.post-item {
+  position: relative;
+  margin-bottom: 20px; 
+}
+.comments-section {
+  position: relative;
+  display: inline-block;
+  margin: 1%;
+}
+.comment-container {
+  position: relative;
+  margin-bottom: 20px; 
+}
+.reusable-popover {
+  position: absolute;
+  top: 0; 
+  right: 0;
+}
+.popover-btns {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .reusable-card {
   width: 90%;
 }
 
-.comment-section {
-  margin: 5%;
-}
-.comments-container {
-  margin-top: 5%;
-}
 
 .reusable-card {
   margin: 1%;

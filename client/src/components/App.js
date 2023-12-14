@@ -12,17 +12,19 @@ import Signup from './Pages/Signup'
 import Profile from './Pages/Profile'
 import Settings from './Pages/Settings'
 import Posts from './Pages/Posts'
+import HashtagSearch from './Pages/HashtagSearch'
 import PostShowPage from './Pages/PostShowPage'
 import CreatePost from './Pages/CreatePost'
 import EditPost from './Pages/EditPost'
 
 function App() {
   const user = useSelector((state) => state.auth.user)
+  const posts = useSelector((state) => state.posts.entities)
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const isLoading = useSelector((state) => state.auth.isLoading)
   const isLoadingComments = useSelector((state) => state.comments.isLoadingComments)
   const dispatch = useDispatch()
-  
+  console.log(posts)
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchUser())
@@ -45,7 +47,8 @@ function App() {
           <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signup />} />
           {isAuthenticated ? (
             <>
-              <Route path="/" element={<Posts />} />
+              <Route path="/" element={<Posts posts={posts} />} />
+              <Route path="/hashtag/:hashtag" element={<HashtagSearch />} />
               <Route path="/profile" element={<Profile user={user} />} />
               <Route path="/edit/:id" element={<EditPost />} />
               <Route path="/gossip/:id" element={<PostShowPage user={user} />} />
