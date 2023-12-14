@@ -75,34 +75,6 @@ export const signupUser = createAsyncThunk(
     }
   }
 )
-// export const signupUser = createAsyncThunk(
-//   'auth/signupUser',
-//   async ({ username, password, passwordConfirmation }, { dispatch }) => {
-//     try {
-//       dispatch(setLoading(true))
-//       const response = await fetch("/signup", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ username: username, password: password, password_confirmation: passwordConfirmation }),
-//       })
-//       if (!response.ok) {
-//         const errorData = await response.json()
-//         dispatch(setErrors(errorData.errors || ["An error occurred."]))
-//         throw new Error("Sign up failed")
-//       }
-//       const data = await response.json()
-//       dispatch(setUser(data))
-//       return data
-//     } catch (error) {
-//       console.error("Sign up failed:", error)
-//       throw error
-//     } finally {
-//       dispatch(setLoading(false))
-//     }
-//   }
-// )
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispatch }) => {
     try {
@@ -122,8 +94,6 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispat
     }
 })
 
-    // make sure this conditionally dispatches errors based on username or password being Present in data
-
 export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dispatch }) => {
   dispatch(setLoading(true))
   try {
@@ -134,7 +104,6 @@ export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dis
       },
       body: JSON.stringify(data),
     })
-    console.log(data)
     if (!response.ok) {
       const errorData = await response.json()
       const errors = errorData.errors || ['An error occurred']
@@ -177,9 +146,7 @@ export const updateProfileImage = createAsyncThunk('auth/updateProfileImage', as
 
 export const deleteUser = createAsyncThunk('auth/deleteUser', async (data, { dispatch }) => {
   try {
-    console.log(data)
     dispatch(setLoading(true))
-    // const response = await fetch("/me/delete", { method: 'DELETE' })
     const response = await fetch("/me/delete", {
       method: 'DELETE',
       headers: {
@@ -220,7 +187,7 @@ const authSlice = createSlice({
       state.usernameErrors = []
       state.passwordErrors = []
     },
-    userRemoved: (state, action) => {
+    userRemoved: (state) => {
       state.user = null
       state.isAuthenticated = false
     },

@@ -11,7 +11,6 @@ function Settings({ user }) {
     const profileImageErrors = useSelector((state) => state.auth.profileImageErrors)
     const usernameErrors = useSelector((state) => state.auth.usernameErrors)
     const passwordErrors = useSelector((state) => state.auth.passwordErrors)
-    // const errors = useSelector((state) => state.auth.errors)
 
     function handleFileChange(event) {
         setProfileImage(event.target.files[0])

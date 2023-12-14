@@ -12,7 +12,6 @@ function ReusableForm({ fields, initialValues, onSubmit, submitBtnText, errors, 
     const handleSubmit = (e) => {
       e.preventDefault()
       onSubmit(formValues)
-      console.log(errors)
     }
     
     return (

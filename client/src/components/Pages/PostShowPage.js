@@ -8,7 +8,6 @@ import ReusableForm from "../UI/ReusableForm"
 import ReusablePopover from "../UI/ReusablePopover"
 import Posts from "./Posts"
 
-
 function PostShowPage({ user }) {
     const dispatch = useDispatch()
     const posts = useSelector((state) => state.posts.entities) 

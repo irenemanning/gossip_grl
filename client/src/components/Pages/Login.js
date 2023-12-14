@@ -16,13 +16,6 @@ function Login() {
         { label: 'Password', type: 'password', placeholder: 'Enter Password', name: 'password' },
     ]
 
-    // async function handleLogin(data) {
-    //     try {
-    //         await dispatch(loginUser(data))
-    //     } catch (error) {
-    //         console.error('Login failed:', error)
-    //     }
-    // }
     async function handleLogin(data) {
         try {
             await dispatch(loginUser(data));

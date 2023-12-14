@@ -24,7 +24,7 @@ function App() {
   const isLoading = useSelector((state) => state.auth.isLoading)
   const isLoadingComments = useSelector((state) => state.comments.isLoadingComments)
   const dispatch = useDispatch()
-  console.log(posts)
+  
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchUser())

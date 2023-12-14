@@ -14,10 +14,6 @@ function CreatePost() {
     ]
     const initialValues = {body: ''}
 
-    // function handleSubmitPost(data) {
-    //     dispatch(createPost(data))
-    //     // errors.length === 0 && navigate("/")
-    // }
     const handleSubmitPost = async (data) => {
       try {
         const result = await dispatch(createPost(data))

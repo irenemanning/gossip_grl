@@ -22,7 +22,6 @@ function Posts({ posts }) {
     }
 
     function onHashtagClick(hashtag) {
-        console.log(`Hashtag clicked: ${hashtag}`)
         const filteredPosts = allPosts.filter(p => p.hashtags.includes(hashtag.substr(1)))
         dispatch(setFilteredPosts(filteredPosts))
         navigate(`/hashtag/${hashtag.substr(1)}`)

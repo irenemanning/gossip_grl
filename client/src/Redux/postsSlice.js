@@ -50,7 +50,6 @@ export const createPost = createAsyncThunk('posts/createPost', async (data, { di
 
 export const updatePost = createAsyncThunk('posts/updatePost', async (data, { dispatch }) => {
   try {
-    console.log(data)
     dispatch(setLoading(true))
     const response = await fetch(`/posts/${data.id}`, {
       method: "PATCH",
@@ -64,12 +63,11 @@ export const updatePost = createAsyncThunk('posts/updatePost', async (data, { di
     if (errors.length === 0) {
       dispatch(postUpdated(payload))
     } else {
-      console.error("Edit post failed:", errors);
+      console.error("Edit post failed:", errors)
     }
-
-    return { payload, errors };
+    return { payload, errors }
   } catch (error) {
-    throw error;
+    throw error
   } finally {
     dispatch(setLoading(false))
   }
@@ -117,7 +115,6 @@ const postsSlice = createSlice({
       },
       setErrors: (state, action) => {
         state.errors = action.payload
-        console.log(action.payload)
       },
       setFilteredPosts(state, action) {
         state.filteredPosts = action.payload

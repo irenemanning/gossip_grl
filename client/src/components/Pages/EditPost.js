@@ -11,16 +11,8 @@ function EditPost() {
     const posts = useSelector((state) => state.posts.entities)
     const postBeingEdited = posts.find((post) => post.id === parseInt(id))
     const errors = useSelector((state) => state.posts.errors)
-
-    // function handleEditPost(data) {
-    //     data = {id: id, body: data.body}
-    //     console.log('Form submitted with data:', data)
-    //     dispatch(updatePost(data))
-        // navigate(`/gossip/${data.id}`)
-    // }
    
     const handleEditPost = async (data) => {
-        console.log(data)
       try {
         const result = await dispatch(updatePost({ id: id, body: data.body }))
         if (result.payload && result.payload.errors && result.payload.errors.length === 0) {
