@@ -1,6 +1,6 @@
 import React from "react"
 import { setFilteredPosts } from "../../Redux/postsSlice"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { deletePost } from "../../Redux/postsSlice"
 import { Button } from "react-bootstrap"
@@ -27,17 +27,7 @@ function Posts({ posts }) {
         dispatch(setFilteredPosts(filteredPosts))
         navigate(`/hashtag/${hashtag.substr(1)}`)
     }
-    // function renderPostBodyWithPinkHashtags(body) {
-    //     return body.split(/(#[^\s]+)/).map((part, index) => (
-    //       part.startsWith("#") ? (
-    //         <span key={index} style={{ color: '#FF038D', cursor: 'pointer' }} onClick={() => onHashtagClick(part)}>
-    //           {part}
-    //         </span>
-    //       ) : (
-    //         <span key={index}>{part}</span>
-    //       )
-    //     ))
-    // }
+
     function renderPostBodyWithPinkHashtags(body) {
         return body.split(/(#[^\s]+)/).map((part, index) => (
             part.startsWith("#") ? (
@@ -47,17 +37,16 @@ function Posts({ posts }) {
             ) : (
                 <span key={index}>{part}</span>
             )
-        ));
+        ))
     }
     return (
         <div className="posts">
             {posts.map((post) => (
-                // <div key={post.id} className="post-item" onClick={()=>{navigate(`/gossip/${post.id}`)}}>
                 <div key={post.id} className="post-item" onClick={(e) => {
-    if (!e.target.closest('span[data-hashtag]')) {
-        navigate(`/gossip/${post.id}`);
-    }
-}}>
+                    if (!e.target.closest('span[data-hashtag]')) {
+                        navigate(`/gossip/${post.id}`)
+                    }
+                }}>
                     <ReusableCard  text={renderPostBodyWithPinkHashtags(post.body)} />
                     {post.user_id === user.id && (
                         <div className="reusable-popover">
