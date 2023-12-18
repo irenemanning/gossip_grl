@@ -22,15 +22,10 @@ function Posts({ posts }) {
     }
 
     function onHashtagClick(hashtag) {
-        // console.log(posts)
-        // console.log(allPosts)
-        // const filteredPosts = allPosts.filter(p => p.hashtags.includes(hashtag.substr(1)))
-        // dispatch(setFilteredPosts(filteredPosts))
-        // navigate(`/hashtag/${hashtag.substr(1)}`)
         if (posts) {
-            const filteredPosts = allPosts.filter(p => p.hashtags && p.hashtags.includes(hashtag.substr(1)));
-            dispatch(setFilteredPosts(filteredPosts));
-            navigate(`/hashtag/${hashtag.substr(1)}`);
+            const filteredPosts = allPosts.filter(p => p.hashtags && p.hashtags.includes(hashtag.substr(1)))
+            dispatch(setFilteredPosts(filteredPosts))
+            navigate(`/hashtag/${hashtag.substr(1)}`)
         }
     }
 
