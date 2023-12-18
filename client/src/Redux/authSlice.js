@@ -124,7 +124,6 @@ export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dis
 
 export const updateProfileImage = createAsyncThunk('auth/updateProfileImage', async (data, { dispatch }) => {
   dispatch(setLoading(true))
-
   try {
     const response = await fetch("/me/update", { method: "PATCH", body: data })
     if (!response.ok) {

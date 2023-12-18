@@ -30,7 +30,7 @@ function CreatePost() {
     return (
         <div>
             <h1>Create Post</h1>
-            <ReusableForm fields={fields} initialValues={initialValues} onSubmit={handleSubmitPost} submitBtnText={"Post"} errors={errors} />
+            <ReusableForm fields={fields} initialValues={initialValues} onSubmit={handleSubmitPost} submitBtnText={"Post"} errors={errors} cancel={()=>navigate("/")} />
         </div>
     )
 }

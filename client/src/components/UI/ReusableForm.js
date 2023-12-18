@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Form } from "react-bootstrap"
 
-function ReusableForm({ fields, initialValues, onSubmit, submitBtnText, errors, btnVariant }) {
+function ReusableForm({ fields, initialValues, onSubmit, submitBtnText, errors, btnVariant, cancel }) {
     const [formValues, setFormValues] = useState(initialValues)
   
     const handleChange = (e) => {
@@ -49,6 +49,7 @@ function ReusableForm({ fields, initialValues, onSubmit, submitBtnText, errors, 
         <Button variant={btnVariant ? btnVariant : "dark"} type="submit">
           {submitBtnText}
         </Button>
+        {cancel && <Button variant='secondary' onClick={cancel}>Cancel</Button>}
       </Form>
     )
   }

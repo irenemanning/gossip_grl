@@ -16,7 +16,7 @@ function EditPost() {
       try {
         const result = await dispatch(updatePost({ id: id, body: data.body }))
         if (result.payload && result.payload.errors && result.payload.errors.length === 0) {
-          navigate(`/gossip/${id}`)
+          navigate(`/gossip/${postBeingEdited.id}`)
         } else {
           console.error("Error editing post:", result.payload ? result.payload.errors : "Payload is undefined")
         }
@@ -31,7 +31,7 @@ function EditPost() {
 
     return (
         <div>
-            <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleEditPost} submitBtnText={"Post"} errors={errors} />
+            <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleEditPost} submitBtnText={"Post"} errors={errors} cancel={()=>navigate(`/gossip/${postBeingEdited.id}`)} />
         </div>
     )
 }

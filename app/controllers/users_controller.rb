@@ -22,7 +22,6 @@ class UsersController < ApplicationController
     # end
 
     def update
-        # if params[:user][:profile_image].present?
         if params[:user][:profile_image].present? && params[:user][:profile_image].respond_to?(:read)
           if @current_user.update(profile_image: params[:user][:profile_image])
             render json: @current_user
@@ -51,9 +50,6 @@ class UsersController < ApplicationController
 
     private
 
-    # def user_params
-    #     params.permit(:username, :password, :password_confirmation, :profile_image)
-    # end
     def user_params
         params.require(:user).permit(:username, :password, :password_confirmation, :profile_image)
     end
