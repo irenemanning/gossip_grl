@@ -75,12 +75,17 @@ export const updatePost = createAsyncThunk('posts/updatePost', async (data, { di
 
 export const deletePost = createAsyncThunk('posts/deletePost', async (postId, { dispatch }) => {
   dispatch(setLoading(true))
-  const response = await fetch(`/posts/${postId}`, { method: 'DELETE' })
-  if (response.ok) {
-    dispatch(postRemoved(postId))
-    return postId
+  try {
+      const response = await fetch(`/posts/${postId}`, { method: 'DELETE' })
+      if (response.ok) {
+        dispatch(postRemoved(postId))
+        return postId
+      }
+      throw new Error('Failed to delete the post')
+  } catch (error) {
+  } finally {
+      dispatch(setLoading(false))
   }
-  throw new Error('Failed to delete the post')
 })
 
 const postsSlice = createSlice({

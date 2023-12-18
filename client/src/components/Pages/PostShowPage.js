@@ -32,7 +32,7 @@ function PostShowPage({ user }) {
     }
     
     return (
-        <div className="posts">
+        <div>
             {post && <Posts posts={[post]} />}
             <h2>Comments</h2>
             <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} submitBtnText="Leave Comment" errors={errors} />

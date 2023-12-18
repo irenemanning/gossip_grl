@@ -20,13 +20,14 @@
 
 .posts {
   position: relative;
-  display: inline-block;
+  display: inline;
   margin: 1%;
 }
 .post-item {
   position: relative;
   margin-bottom: 20px; 
 }
+
 .comments-section {
   position: relative;
   display: inline-block;
@@ -49,10 +50,6 @@
 }
 .reusable-card {
   width: 90%;
-}
-
-
-.reusable-card {
   margin: 1%;
 
 }

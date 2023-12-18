@@ -1,6 +1,6 @@
 import React from "react"
 import { setFilteredPosts } from "../../Redux/postsSlice"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { deletePost } from "../../Redux/postsSlice"
 import { Button } from "react-bootstrap"
@@ -13,12 +13,18 @@ function Posts({ posts }) {
     const isLoadingPosts = useSelector((state) => state.posts.isLoadingPosts)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
   
     if (isLoadingPosts) {
         return <div>Loading...</div>
     }
-    function handleDelete(post) {
-        dispatch(deletePost(post.id))
+    function handleEdit(post) {
+        navigate(`/edit/${post.id}`)
+    }
+    
+    async function handleDelete(post) {
+        await dispatch(deletePost(post.id))
+        navigate('/')
     }
 
     function onHashtagClick(hashtag) {
@@ -44,12 +50,13 @@ function Posts({ posts }) {
         <div className="posts">
             {posts.map((post) => (
                 <div key={post.id} className="post-item" onClick={(e) => {
-                    if (!e.target.closest('span[data-hashtag]')) {
+                    const isInsidePopover = e.target.closest('.reusable-popover')
+                    if (!isInsidePopover && !e.target.closest('span[data-hashtag]')) {
                         navigate(`/gossip/${post.id}`)
                     }
                 }}>
                     <ReusableCard  text={renderPostBodyWithPinkHashtags(post.body)} />
-                    {post.user_id === user.id && (
+                    {location.pathname.includes('/gossip/') && post.user_id === user.id && (
                         <div className="reusable-popover">
                         <ReusablePopover trigger="click" placement="right" 
                         content={(
@@ -57,7 +64,7 @@ function Posts({ posts }) {
                                 <Button
                                     variant="outline-secondary"
                                     size="sm"
-                                    onClick={() => navigate(`/edit/${post.id}`)}
+                                    onClick={handleEdit(post)}
                                 >
                                     Edit
                                 </Button>
