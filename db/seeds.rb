@@ -10,11 +10,11 @@ user1 = User.create(username: 'user1', password: 'password1')
 user2 = User.create(username: 'user2', password: 'password2')
 
 posts_data1 = [
-  { body: 'This is the first post. #wtf #swag' },
-  { body: 'Another post by user1. #love #lol' },
+  { body: 'Becky got the worst nosejob. #toobad #sosad #lol' },
+  { body: 'A post by user1. #love #lol' },
 ]
 posts_data2 = [
-  { body: 'Irene is so cool. #love #swag' },
+  { body: 'Irene is so cool. #love #tea' },
   { body: 'User2 here with a good post. #tea #slay #lol' },
 ]
 
