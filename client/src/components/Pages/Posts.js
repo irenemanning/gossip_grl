@@ -3,7 +3,7 @@ import { setFilteredPosts } from "../../Redux/postsSlice"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { deletePost } from "../../Redux/postsSlice"
-import { Button } from "react-bootstrap"
+import { Button, Image } from "react-bootstrap"
 import ReusablePopover from "../UI/ReusablePopover"
 import ReusableCard from "../UI/ReusableCard"
 
@@ -55,24 +55,26 @@ function Posts({ posts }) {
                         navigate(`/gossip/${post.id}`)
                     }
                 }}>
+                    <small className="post-username">gossip from {post.user.username} </small>
+                    <div className="post-profile-image">
+                        {post.user.profile_image === null ? (
+                        <Image src="/Profile-Placeholder.jpg" style={{height: "70px", width: "70px"}}  />
+                        ) : (
+                        <Image src={user.profile_image} style={{height: "70px", width: "70px"}} />
+                        )}
+                    </div>
+                    
                     <ReusableCard  text={renderPostBodyWithPinkHashtags(post.body)} />
+        
                     {location.pathname.includes('/gossip/') && post.user_id === user.id && (
                         <div className="reusable-popover">
                         <ReusablePopover trigger="click" placement="right" 
                         content={(
                             <div className="popover-btns">
-                                <Button
-                                    variant="outline-secondary"
-                                    size="sm"
-                                    onClick={handleEdit(post)}
-                                >
+                                <Button variant="outline-secondary" size="sm" onClick={handleEdit(post)} >
                                     Edit
                                 </Button>
-                                <Button
-                                    variant="outline-danger"
-                                    size="sm"
-                                    onClick={() => handleDelete(post)}
-                                >
+                                <Button variant="outline-danger" size="sm" onClick={() => handleDelete(post)} >
                                     Delete
                                 </Button>
                             </div>

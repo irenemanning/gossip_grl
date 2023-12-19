@@ -40,6 +40,7 @@ class UsersController < ApplicationController
     def delete
         password = params[:password]
         if @current_user.authenticate(password)
+        @current_user.posts.destroy_all
         @current_user.destroy
         reset_session
         render json: { message: 'Account deleted successfully' }

@@ -26,6 +26,14 @@
 .post-item {
   position: relative;
   margin-bottom: 20px; 
+  display: flex;
+  align-items: center;
+}
+.post-username {
+  padding: 2%;
+}
+.post-profile-image {
+  margin-right: 10px;
 }
 
 .comments-section {

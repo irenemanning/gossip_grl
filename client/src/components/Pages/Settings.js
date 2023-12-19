@@ -4,6 +4,7 @@ import { Image, ListGroup, Form, Button } from "react-bootstrap"
 import { updateUser, updateProfileImage, deleteUser } from "../../Redux/authSlice"
 import ReusableForm from "../UI/ReusableForm"
 import ReusableModal from "../UI/ReusableModal"
+import { useNavigate } from "react-router-dom"
 function Settings({ user }) {
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const dispatch = useDispatch()
@@ -11,6 +12,7 @@ function Settings({ user }) {
     const profileImageErrors = useSelector((state) => state.auth.profileImageErrors)
     const usernameErrors = useSelector((state) => state.auth.usernameErrors)
     const passwordErrors = useSelector((state) => state.auth.passwordErrors)
+    const navigate = useNavigate()
 
     function handleFileChange(event) {
         setProfileImage(event.target.files[0])
@@ -30,6 +32,7 @@ function Settings({ user }) {
     function handleDeleteUser(data) {
         dispatch(deleteUser(data))
         setShowDeleteModal(false)
+        navigate('/login')
     }
 
     return (
