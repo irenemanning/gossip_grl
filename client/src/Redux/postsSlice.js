@@ -101,8 +101,8 @@ const postsSlice = createSlice({
         state.entities = action.payload
       },
       postAdded: (state, action) => {
-        const { id, body, hashtags, user_id } = action.payload
-        const newPost = { id, body, hashtags, user_id }
+        const { id, body, hashtags, user_id, user: {username, profile_image} } = action.payload
+        const newPost = { id, body, hashtags, user_id, user: {username, profile_image} }
         state.entities = [newPost, ...state.entities]
         state.errors = []
         state.filteredPosts = [...state.filteredPosts, newPost]
