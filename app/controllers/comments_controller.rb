@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
     before_action :authorize
     def index
-        comments = Comment.all.order(created_at: :desc)
+        comments = Comment.includes(:user).order(created_at: :desc)
         render json: comments
     end
     def show

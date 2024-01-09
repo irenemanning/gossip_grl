@@ -39,8 +39,8 @@ function NavBar({user}){
                     <Nav className="justify-content-end flex-grow-1 pe-3">
                     {user ? (
                     <>
-                        <Nav.Link href="/gossip">+ GOSSIP</Nav.Link>
                         <Nav.Link href="/profile">Hello, {user.username}</Nav.Link>
+                        <Nav.Link href="/gossip">+ GOSSIP</Nav.Link>
                         <Nav.Link onClick={() => handleLogout(user)} style={{color: "#F10E1F"}} >Logout</Nav.Link>
                     </>
                     ) : (

@@ -1,7 +1,7 @@
 class User < ApplicationRecord
     has_one_attached :profile_image
     has_many :posts
-    has_many :comments, through: :posts
+    has_many :comments
 
     validates :username, presence: true, uniqueness: { case_sensitive: false, scope: :id }
     validates_uniqueness_of :username, scope: :id, allow_nil: true, if: :new_record?

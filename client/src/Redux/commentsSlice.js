@@ -9,20 +9,38 @@ const handleErrors = async (response, dispatch) => {
   return { payload: await response.json(), errors: [] }
 }  
 
-export const fetchComments = createAsyncThunk('comments/fetchComments', async (_, { dispatch, getState }) => {
+// export const fetchComments = createAsyncThunk('comments/fetchComments', async (_, { dispatch, getState }) => {
+//   try {
+//     dispatch(setLoading(true))
+//     const { posts } = getState()
+//     if (!Array.isArray(posts.entities)) {
+//       console.error('Posts entities is not an array:', posts.entities)
+//       return []
+//     }
+//     const comments = posts.entities.flatMap((post) => post.comments)
+//     dispatch(setComments(comments))
+//     return comments
+//   } catch (error) {
+//     console.error('fetchComments error:', error)
+//     throw error
+//   } finally {
+//     dispatch(setLoading(false))
+//   }
+// })
+
+export const fetchComments = createAsyncThunk('comments/fetchComments', async (_, { dispatch, rejectWithValue }) => {
   try {
     dispatch(setLoading(true))
-    const { posts } = getState()
-    if (!Array.isArray(posts.entities)) {
-      console.error('Posts entities is not an array:', posts.entities)
-      return []
+    const response = await fetch('/comments')
+    if (response.ok) {
+      const comments = await response.json()
+      dispatch(setComments(comments))
+      return comments
+    } else {
+      throw new Error('Failed to fetch user data')
     }
-    const comments = posts.entities.flatMap((post) => post.comments)
-    dispatch(setComments(comments))
-    return comments
   } catch (error) {
-    console.error('fetchComments error:', error)
-    throw error
+    return rejectWithValue(error.message)
   } finally {
     dispatch(setLoading(false))
   }

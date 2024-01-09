@@ -40,19 +40,22 @@
   position: relative;
   display: inline-block;
   margin: 1%;
+  align-items: center;
 }
 .comment-container {
   position: relative;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center; 
 }
 .reusable-popover {
-  position: absolute;
   top: 0; 
   right: 0;
+  align-items: center;
 }
 .popover-btns {
-  background-color: #fff;
-  border: 1px solid #ccc;
+  /* background-color: #fff;
+  border: 1px solid #ccc; */
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

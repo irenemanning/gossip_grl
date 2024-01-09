@@ -1,12 +1,10 @@
 import React from "react"
-import { Button } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import { createComment, deleteComment } from "../../Redux/commentsSlice"
-import ReusableCard from "../UI/ReusableCard"
 import ReusableForm from "../UI/ReusableForm"
-import ReusablePopover from "../UI/ReusablePopover"
 import Posts from "./Posts"
+import Comments from "./Comments"
 
 function PostShowPage({ user }) {
     const dispatch = useDispatch()
@@ -27,38 +25,16 @@ function PostShowPage({ user }) {
         data = {post_id: post.id, user_id: user.id, body: data.body}
         dispatch(createComment(data))
     }
-    function handleDeleteComment(data) {
-        dispatch(deleteComment(data))
-    }
-    
+
     return (
         <div>
             {post && <Posts posts={[post]} />}
             <h2>Comments</h2>
             <ReusableForm initialValues={initialValues} fields={fields} onSubmit={handleSubmitComment} submitBtnText="Leave Comment" errors={errors} />
-            <div className="comments-section">
+            <div>
                 {postComments && postComments.map((c) => (
-                <div className="comment-container" key={c.id}>
-                    <ReusableCard  text={c.body} />
-                    {user.id === c.user_id ? (
-                        <div className="reusable-popover">
-                            <ReusablePopover trigger="click" placement="right" 
-                            content={(
-                                <div className="popover-btns">
-                                <Button
-                                    variant="outline-danger"
-                                    size="sm"
-                                    onClick={() => handleDeleteComment(c.id)}
-                                >
-                                    Delete
-                                </Button>
-                                </div>
-                            )} >
-                            <Button variant="light" >...</Button>
-                            </ReusablePopover>
-                        </div>
-                        
-                    ) : (null)} 
+                <div key={c.id}>
+                    <Comments c={c} user={user} />
                 </div>
                 ))}
             </div>

@@ -2,7 +2,7 @@ class PostsController < ApplicationController
     before_action :authorize
     
     def index
-        posts = Post.all.order(created_at: :desc)
+        posts = Post.includes(comments: :user).order(created_at: :desc)
         render json: posts
     end
     def show

@@ -60,7 +60,7 @@ function Posts({ posts }) {
                         {post.user.profile_image === null ? (
                         <Image src="/Profile-Placeholder.jpg" style={{height: "70px", width: "70px"}}  />
                         ) : (
-                        <Image src={user.profile_image} style={{height: "70px", width: "70px"}} />
+                        <Image src={post.user.profile_image} style={{height: "70px", width: "70px"}} />
                         )}
                     </div>
                     
@@ -71,7 +71,7 @@ function Posts({ posts }) {
                         <ReusablePopover trigger="click" placement="right" 
                         content={(
                             <div className="popover-btns">
-                                <Button variant="outline-secondary" size="sm" onClick={handleEdit(post)} >
+                                <Button variant="outline-secondary" size="sm" onClick={() => handleEdit(post)} >
                                     Edit
                                 </Button>
                                 <Button variant="outline-danger" size="sm" onClick={() => handleDelete(post)} >
