@@ -5,9 +5,9 @@ class ApplicationController < ActionController::API
     
     before_action :authorize
 
-    def frontend
-        render file: "client/public/index.html"
-    end
+    # def frontend
+    #     render file: "client/public/index.html"
+    # end
 
     private
 

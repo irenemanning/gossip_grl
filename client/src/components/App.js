@@ -1,11 +1,11 @@
 import '../App.css'
 import React, { useEffect } from "react"
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser } from '../Redux/authSlice'
 import { fetchPosts } from '../Redux/postsSlice'
 import { fetchComments } from '../Redux/commentsSlice'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import NavBar from './NavBar'
 import Login from './Pages/Login'
 import Signup from './Pages/Signup'
@@ -43,6 +43,7 @@ function App() {
       <Router>
         <NavBar user={user} />
         <Routes>
+          {/* <Route path="*" element={<Navigate to="/login" />} /> */}
           <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
           <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signup />} />
           {isAuthenticated ? (
