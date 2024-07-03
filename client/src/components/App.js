@@ -37,7 +37,7 @@ function App() {
   if (isLoading || isLoadingComments) {
     return <div>Loading...</div>
   }
- 
+
   return (
     <div className="App">
       <Router>

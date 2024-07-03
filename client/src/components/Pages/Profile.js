@@ -8,6 +8,7 @@ function Profile({user}) {
     const navigate = useNavigate()
     const posts = useSelector((state) => state.posts.entities)
     const userPosts = posts.filter((post) => post.user_id === user.id)
+    
 
     return (
         <div>

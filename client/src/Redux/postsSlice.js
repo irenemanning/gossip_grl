@@ -125,9 +125,18 @@ const postsSlice = createSlice({
       },
       setFilteredPosts(state, action) {
         state.filteredPosts = action.payload
+      },
+      updateUserInPosts(state, action) {
+        const updatedUser = action.payload
+        state.entities = state.entities.map(post => {
+          if (post.user_id === updatedUser.id) {
+            return { ...post, user: { ...post.user, profile_image: updatedUser.profile_image } }
+          }
+          return post
+        })
       }
     },
   })
   
-  export const { setPosts, postAdded, postRemoved, postUpdated, setLoading, setErrors, setFilteredPosts } = postsSlice.actions
+  export const { setPosts, postAdded, postRemoved, postUpdated, setLoading, setErrors, setFilteredPosts, updateUserInPosts } = postsSlice.actions
   export default postsSlice.reducer

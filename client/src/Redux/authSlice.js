@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { updateUserInPosts } from "./postsSlice"
 
 export const fetchUser = createAsyncThunk('auth/fetchUser', async (_, { dispatch, rejectWithValue }) => {
     try {
@@ -122,11 +123,13 @@ export const updateUser = createAsyncThunk('auth/updateUser', async (data, { dis
   return false
 })
 
-export const updateProfileImage = createAsyncThunk('auth/updateProfileImage', async (data, 
-  { dispatch }) => {
+export const updateProfileImage = createAsyncThunk('auth/updateProfileImage', async (data, { dispatch }) => {
   dispatch(setLoading(true))
   try {
-    const response = await fetch("/me/update", { method: "PATCH", body: data })
+    const response = await fetch('/me/update', {
+      method: 'PATCH',
+      body: data,
+    })
     if (!response.ok) {
       const errorData = await response.json()
       const errors = errorData.errors || ['An error occurred']
@@ -135,6 +138,7 @@ export const updateProfileImage = createAsyncThunk('auth/updateProfileImage', as
     }
     const responseData = await response.json()
     dispatch(userUpdated(responseData))
+    dispatch(updateUserInPosts(responseData))
     return responseData
   } catch (error) {
     console.error('updateProfileImage error:', error)
@@ -186,6 +190,7 @@ const authSlice = createSlice({
       state.errors = []
       state.usernameErrors = []
       state.passwordErrors = []
+      state.profileImageErrors = []
     },
     userRemoved: (state) => {
       state.user = null
