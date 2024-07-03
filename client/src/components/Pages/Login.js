@@ -10,7 +10,7 @@ function Login() {
     const dispatch = useDispatch()
     const errors = useSelector((state) => state.auth.errors)
 
-    const initialValues = {username: '', password: ''}
+    const initialValues = {username: 'demo', password: 'demo'}
     const fields = [
         { label: 'Username', type: 'text', placeholder: 'Enter Username', name: 'username'},
         { label: 'Password', type: 'password', placeholder: 'Enter Password', name: 'password' },
